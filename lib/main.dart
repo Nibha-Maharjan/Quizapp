@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:quizapp/Quiz.dart';
+import 'package:quizapp/Result.dart';
 
 void main() {
   runApp(MainApp());
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   MainApp({super.key});
+  @override
+  State<StatefulWidget> createState() {
+    return MainAppState();
+  }
+}
+
+class MainAppState extends State<MainApp> {
+  final List<String> answers = ['', '', ''];
   var _index = 0;
   var questions = [
     {
@@ -23,6 +32,18 @@ class MainApp extends StatelessWidget {
     }
   ];
 
+  void onAnswerClick() {
+    setState(() {
+      _index += 1;
+    });
+  }
+
+  void onRestartClicked() {
+    setState(() {
+      _index = 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -34,10 +55,10 @@ class MainApp extends StatelessWidget {
           backgroundColor: Colors.indigo,
           body: _index < questions.length
               ? Center(
-                  child: Quiz(questions, _index),
+                  child: Quiz(questions, _index, onAnswerClick, answers),
                 )
-              : const Center(
-                  child: Text('All Done'),
+              : Center(
+                  child: Result(questions, answers, onRestartClicked),
                 )),
     );
   }
